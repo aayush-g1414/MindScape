@@ -1,8 +1,10 @@
 import os
 
-from flask import Flask, render_template
-from . import settings, controllers, models
-# from .extensions import db
+from flask import Flask, jsonify
+from . import settings, controllers
+
+
+
 
 project_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -11,8 +13,14 @@ def create_app(config_object=settings):
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_object(config_object)
 
+    from app.db import terminate_on_app_teardown, db
+    db.init_app(app)
+
+    terminate_on_app_teardown(app) # ensures we terminate db connection before returning response
+
     register_extensions(app)
     register_blueprints(app)
+
     register_errorhandlers(app)
     return app
 
@@ -27,22 +35,27 @@ def register_extensions(app):
 def register_blueprints(app):
     """Register Flask blueprints."""
     app.register_blueprint(controllers.home.blueprint)
-    # app.register_blueprint(controllers.auth.blueprint)
-    # app.register_blueprint(controllers.tutorial.blueprint)
+    app.register_blueprint(controllers.tutorial.blueprint)
     return None
 
 def register_errorhandlers(app):
     """Register error handlers."""
     @app.errorhandler(401)
     def internal_error(error):
-        return render_template('401.html'), 401
+        return jsonify({
+            "message": "401 error!"
+        }), 401
 
     @app.errorhandler(404)
     def page_not_found(error):
-        return render_template('404.html'), 404
+        return jsonify({
+            "message": "page does not exist!"
+        }), 404
 
     @app.errorhandler(500)
     def internal_error(error):
-        return render_template('500.html'), 500
+        return jsonify({
+            "message": "internal error occurred!"
+        }), 500
 
     return None

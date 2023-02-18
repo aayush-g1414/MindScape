@@ -9,3 +9,6 @@ ENV = os.getenv('FLASK_ENV', default='production')
 DEBUG = ENV == 'development'
 SECRET_KEY = os.getenv('SECRET_KEY', default='octocat')
 SQLALCHEMY_TRACK_MODIFICATIONS = False
+MONGODB_SETTINGS = {
+    'host': os.getenv('MONGODB_URL'),
+}
