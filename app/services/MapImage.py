@@ -30,7 +30,7 @@ def mapImage(notes):
     import openai
     openai.api_key = os.getenv('OPEN_AI_API_KEY')
     max_tokens = 2000
-    question = "Create an outputs similar to this set as a json: {'Pets': { 'Dog': { 'Bark': {'noise': {}, 'dog noise': {} }, 'Walk': {'action' : {}, 'action again' : {}}  }, 'Cat': {'Meow': { 'noise': {}, 'cat noise': {} },'Purr': { 'action': {}, 'cat action': {} }  } }} \n\n where the first word is byitself/the root, noise and dog noise relate to bark, action and action again relate to walk, noise and cat noise relate to meow, and action and cat action relate to purr\n\nso that each successive layer has an extra set of curly braces using this text instead (make sure to extract keywords only and only create the output based on similarity/correlation between the keywords and key reminder is that you should create 2 different sets so that you don't have to relate stuff that isn't related to each other -> do this in the form of Set1:  \n Set2: ): \n\n" + notes
+    question = "Create an outputs similar to this set as a json: {'Pets': { 'Dog': { 'Bark': {'noise': { }, 'dog noise': { } }, 'Walk': {'action' : { }, 'action again' : { } }  }, 'Cat': {'Meow': { 'noise': { }, 'cat noise': { } },'Purr': { 'action': { }, 'cat action': { } }  } } } \n\n where the first word is byitself/the root, noise and dog noise relate to bark, action and action again relate to walk, noise and cat noise relate to meow, and action and cat action relate to purr\n\nso that each successive layer has an extra set of curly braces using this text instead (make sure to extract keywords only and only create the output based on similarity/correlation between the keywords and key reminder is that you should create 2 different sets so that you don't have to relate stuff that isn't related to each other and keep each layer between 2^n and 4^n elements-> do this in the form of Set1:  \n Set2: ): \n\n" + notes
     response = openai.Completion.create(
                         engine="text-davinci-003",
                         prompt=question,
@@ -97,9 +97,17 @@ def mapImage(notes):
 
     # Output the graph as a PNG file in a folder
     print('out')
-    dot.render(f'../mindmap/set1_treetest', format='png')
+    # genereate a random 5 digit number
+    import random
+    import string
+    def get_random_string(length):
+        num = random.randint(10000, 99999)
+        return string(num)
+    num = get_random_string(5)
+
+    dot.render(f'../mindmap/Tree{num}', format='png')
     print('renders')
-    var = 'set1_treetest.png'
+    var = f'Tree{num}.png'
     print(var)
     return var
     #graph2.write_png('mindmaps/set2_tree.png')
