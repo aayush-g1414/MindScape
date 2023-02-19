@@ -54,13 +54,13 @@ def create_class():
             valid_file_added = True
             filename = secure_filename(file.filename)
             file_extension = file.filename.split('.')[1]
-            file.save(os.path.join(current_app.config['UPLOAD_FOLDER'], filename))
+            file.save(os.path.join('app', 'static', current_app.config['UPLOAD_FOLDER'], filename))
 
             file_type = file_extension_to_type[file_extension]
-            with open(os.path.join(current_app.config['UPLOAD_FOLDER'], filename), "rb") as f:
+            with open(os.path.join('app', 'static', current_app.config['UPLOAD_FOLDER'], filename), "rb") as f:
                 file_data = Binary(f.read())
 
-            user_class.resources.append(Resource(type=file_type, url=request.host_url+filename, data=file_data))
+            user_class.resources.append(Resource(type=file_type, url=url_for('static', filename=filename), data=file_data))
 
     if request.form.get('vidLink'):
         user_class.resources.append(Resource(type='YOUTUBE',url=request.form.get('vidLink')))
@@ -160,7 +160,7 @@ def generate_quiz(class_id):
     for resource in user_class.resources:
         if resource.type == pdf_file_enum:
             resource_url_parts = resource.url.split('/')
-            filename = os.path.join(current_app.config['UPLOAD_FOLDER'], resource_url_parts[len(resource_url_parts) - 1])
+            filename = os.path.join('app', 'static', current_app.config['UPLOAD_FOLDER'], resource_url_parts[len(resource_url_parts) - 1])
             # filename = 'user_uploads/Psych_cheat_sheet_-_Google_Docs.pdf'  # todo: remove
             reader = PdfReader(filename)
 
@@ -252,7 +252,7 @@ def chat(class_id):
     for resource in user_class.resources:
         if resource.type == pdf_file_enum:
             resource_url_parts = resource.url.split('/')
-            filename = os.path.join(current_app.config['UPLOAD_FOLDER'], resource_url_parts[len(resource_url_parts) - 1])
+            filename = os.path.join('app', 'static', current_app.config['UPLOAD_FOLDER'], resource_url_parts[len(resource_url_parts) - 1])
             # filename = 'user_uploads/Psych_cheat_sheet_-_Google_Docs.pdf'  # todo: remove
             reader = PdfReader(filename)
 
