@@ -19,5 +19,12 @@ def chunkify(max_token_size, text):
             current_chunk = ''
         else:
             current_num_tokens += num_of_tokens(line)
-            # if current_chunk
-            #     current_chunk +=
+            if current_chunk == ' ':
+                current_chunk += line
+            else:
+                current_chunk += '. '+line
+
+    if current_chunk != ' ':
+        chunks.append(current_chunk)
+
+    return chunks
