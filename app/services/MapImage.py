@@ -102,7 +102,7 @@ def mapImage(notes):
     import string
     def get_random_string(length):
         num = random.randint(10000, 99999)
-        return string(num)
+        return str(num)
     num = get_random_string(5)
 
     dot.render(f'../mindmap/Tree{num}', format='png')
