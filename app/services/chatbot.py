@@ -38,7 +38,7 @@ def chatbot(text):
     # Set the text column to be the raw text with the newlines removed
     df['text'] = df.fname + ". " + remove_newlines(df.text)
     df.to_csv('scraped.csv')
-    df.head()
+    #df.head()
 
     ################################################################################
     ### Step 7
@@ -121,7 +121,7 @@ def chatbot(text):
 
     df = pd.DataFrame(shortened, columns = ['text'])
     df['n_tokens'] = df.text.apply(lambda x: len(tokenizer.encode(x)))
-    df.n_tokens.hist()
+    #df.n_tokens.hist()
 
     ################################################################################
     ### Step 10
@@ -132,7 +132,7 @@ def chatbot(text):
 
     df['embeddings'] = df.text.apply(lambda x: openai.Embedding.create(input=x, engine='text-embedding-ada-002')['data'][0]['embedding'])
     df.to_csv('embeddings.csv')
-    df.head()
+    #df.head()
 
     ################################################################################
     ### Step 11
@@ -141,7 +141,7 @@ def chatbot(text):
     df=pd.read_csv('embeddings.csv', index_col=0)
     df['embeddings'] = df['embeddings'].apply(eval).apply(np.array)
 
-    df.head()
+    #df.head()
     return df
     ################################################################################
     ### Step 12
