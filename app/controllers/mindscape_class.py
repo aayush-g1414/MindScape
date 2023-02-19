@@ -5,9 +5,13 @@ from bson.binary import Binary
 from bson.objectid import ObjectId
 from app.utils import bad_request_code
 from flask_cors import CORS
+from pypdf import PdfReader
 import json
 
 import os
+
+docx_file_enum = 'DOCX_FILE'
+pdf_file_enum = 'PDF_FILE'
 
 class_bp = Blueprint('class', __name__, url_prefix='/classes')
 CORS(class_bp)
@@ -19,11 +23,9 @@ def create_class():
     # resource can be url or file or both
     allowed_extensions = ['pdf', 'docx']
     file_extension_to_type = {
-        'docx': 'DOCX_FILE',
-        'pdf': 'PDF_FILE'
+        'docx': docx_file_enum,
+        'pdf': pdf_file_enum
     }
-
-    session_id = None
 
     if request.args.get('session_id') is None:
         return jsonify({
@@ -56,26 +58,28 @@ def create_class():
             with open(os.path.join(current_app.config['UPLOAD_FOLDER'], filename), "rb") as f:
                 file_data = Binary(f.read())
 
-            user_class.resources.append(Resource(type=file_type, url=filename, data=file_data))
+            user_class.resources.append(Resource(type=file_type, url=request.host_url+filename, data=file_data))
 
     if request.form.get('vidLink'):
         user_class.resources.append(Resource(type='YOUTUBE',url=request.form.get('vidLink')))
 
-    print(user_class.resources)
+    user_class = user_class.save()
 
-    user_class.save()
+    print('user class id: '+str(user_class.id))
 
     return redirect('http://localhost:3000/class/' + str(user_class.id), 302)
 
 
 # get classes by session
 @class_bp.route('/', methods=['GET'])
-def get_classes(session_id):
+def get_classes():
     if request.args.get('session_id') is not None:
+        session_id = request.args.get('session_id')
         classes = Class.objects(session_id=ObjectId(session_id))
         results = []
         for mindscape_class in classes:
             results.append(mindscape_class.client_json())
+
         return jsonify({
             'data': results
         })
@@ -87,14 +91,14 @@ def get_classes(session_id):
 # get individual class
 @class_bp.route('/<class_id>', methods=['GET'])
 def get_class(class_id):
-    user_class = Class.objects(_id=ObjectId(class_id)).first()
+    user_class = Class.objects(pk=class_id).first()
 
     if user_class is None:
         return jsonify({
             'error': 'class does not exist'
         }), 404
 
-    return jsonify(json.loads(user_class.client_json())), 200
+    return jsonify(user_class.client_json()), 200
 
 @class_bp.route('/<class_id>/', methods=['PUT'])
 def add_resource(class_id):
@@ -105,7 +109,7 @@ def add_resource(class_id):
         'pdf': 'PDF_FILE'
     }
 
-    user_class = Class.objects(_id=ObjectId(class_id))
+    user_class = Class.objects(pk=class_id).first()
 
     if request.form.get('name') is not None:
         user_class.name = request.form.get('name')
@@ -127,7 +131,7 @@ def add_resource(class_id):
             with open(os.path.join(current_app.config['UPLOAD_FOLDER'], filename), "rb") as f:
                 file_data = Binary(f.read())
 
-            user_class.resources.append(Resource(type=file_type, url=filename, data=file_data))
+            user_class.resources.append(Resource(type=file_type, url=request.host_url+filename, data=file_data))
 
     if request.form.get('vidLink'):
         user_class.resources.append(Resource(type='YOUTUBE', url=request.form.get('vidLink')))
@@ -139,43 +143,32 @@ def add_resource(class_id):
     })
 
 
-# [
-#     {
-#         'question': 'what is 1+1?',
-#         'answer': 1,
-#         'options': [
-#             '3',
-#             '2',
-#             '1',
-#             '0'
-#         ]
-#     },
-# {
-#         'question': 'what is 1+1?',
-#         'answer': 1,
-#         'options': [
-#             '3',
-#             '2',
-#             '1',
-#             '0'
-#         ]
-#     }
-# ]
-
-
 @class_bp.route('/<class_id>/generate-quiz', methods=['POST'])
 def generate_quiz(class_id):
-    """
-    building a qa bot with GPT3
-    - tokenize the knowledge base - use tiktoken
-    -
-    """
-    user_class = Class.objects(_id=ObjectId(class_id))
+    user_class = Class.objects(pk=class_id).first()
 
     if len(user_class.resources) == 0:
         return jsonify({
             'error': 'No resources to generate quizzes from!',
         })
+
+    # transforms all resources to text
+    # pass text to QuizGen, store quizzes
+    text = ''
+    for resource in user_class.resources:
+        if resource.type == pdf_file_enum:
+            resource_url_parts = resource.url.split('/')
+            filename = os.path.join(current_app.config['UPLOAD_FOLDER'], resource_url_parts[len(resource_url_parts) - 1])
+            # filename = 'user_uploads/Psych_cheat_sheet_-_Google_Docs.pdf'  # todo: remove
+            reader = PdfReader(filename)
+
+            for page in reader.pages:
+                text += page.extract_text()
+
+            print(text)
+
+        elif resource.type == docx_file_enum:
+            pass
     return jsonify([
         {
             'q': 'What is an OS?',

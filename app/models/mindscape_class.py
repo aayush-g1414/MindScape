@@ -23,6 +23,12 @@ class Resource(EmbeddedDocument):
     data = BinaryField()
     # data - will be a string for urls and binary data for files
 
+    def client_json(self):
+        return {
+            'type': self.type,
+            'url': self.url
+        }
+
 
 class FlashCard(EmbeddedDocument):
     front = StringField(required=True)
@@ -31,7 +37,6 @@ class FlashCard(EmbeddedDocument):
 
 class Class(db.Document):
     meta = {'collection': 'classes'}
-    _id = ObjectIdField()
     name = StringField(required=True)
     session_id = ObjectIdField(required=True)
     date_created = DateTimeField()
@@ -41,12 +46,20 @@ class Class(db.Document):
     mind_map = StringField()
 
     def client_json(self):
-        self_json = json.loads(self.to_json())
+        # self_json = json.loads(self.to_json())
+        # print(self_json)
+        resources_json = []
+        for resource in self.resources:
+            resources_json.append(resource.client_json())
         return {
-            'id': str(self._id),
-            'name': self_json.name,
+            'id': str(self.id),
+            'name': self.name,
             'session_id': str(self.session_id),
-            'date_created': self_json.date_created
+            'date_created': self.date_created,
+            'resources': resources_json,
+            'flashcards': self.flashcards,
+            'quizzes': self.quizzes,
+            'mind_map': self.mind_map
         }
         # return {
         #     'id': str(self.id),

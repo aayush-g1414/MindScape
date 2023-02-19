@@ -30,4 +30,5 @@ Generate 10 quiz questions based on text content that you will be given to test 
 5. Your response should only contain the JSON response
 6. If the content is too small to generate 10 non-redundant questions, reduce the number of questions as needed
 Here is the content from which you will generate the quiz from:
+
 """

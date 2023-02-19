@@ -17,6 +17,17 @@ def get_sessions():
 
     return jsonify(result)
 
+@session.route('/<session_id>', methods=['GET'])
+def get_session(session_id):
+    user_session = UserSession.objects(pk=session_id).first()
+
+    if user_session is None:
+        return jsonify({
+            'error': 'no such session!'
+        }), 404
+
+    return jsonify(user_session.client_json())
+
 
 @session.route('/', methods=['POST'])
 def create_session():
