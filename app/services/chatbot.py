@@ -228,7 +228,7 @@ def chatbot(text):
                     presence_penalty=0.0
                 )
 
-            return response["choices"][0]["text"].strip()
+                return response["choices"][0]["text"].strip()
             return response["choices"][0]["text"].strip()
         except Exception as e:
             print(e)
