@@ -262,5 +262,5 @@ def chat(class_id):
     df = chatbot(text)
     data = request.get_json()
     message = data['message']
-    response_message = getResponse(message, df)
+    response_message = getResponse(df, message)
     return jsonify({'message': response_message})
