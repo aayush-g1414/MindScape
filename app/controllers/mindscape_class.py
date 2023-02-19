@@ -6,6 +6,8 @@ from bson.objectid import ObjectId
 from app.utils import bad_request_code
 from flask_cors import CORS
 from pypdf import PdfReader
+from app.utils import gpt3
+from app.services.quiz_gen import QuizGen
 import json
 
 import os
@@ -169,6 +171,23 @@ def generate_quiz(class_id):
 
         elif resource.type == docx_file_enum:
             pass
+
+    print(text)
+    chunks = gpt3.chunkify(3500, text)
+    first_chunk = 0
+
+    results = []
+
+    for chunk in chunks:
+        if first_chunk == 0:
+            first_chunk = 1
+            results += QuizGen.generate_quiz_questions(chunk)
+        else:
+            prompt = chunk + "\n" + json.dumps(results[-5:])
+            results += QuizGen.generate_quiz_questions(prompt)
+
+    print(results)
+
     return jsonify([
         {
             'q': 'What is an OS?',

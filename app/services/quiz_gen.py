@@ -13,7 +13,7 @@ class QuizGen:
         response = openai.Completion.create(
             model="text-davinci-003",
             prompt=prompt + notes,
-            temperature=0.25
+            temperature=0.2
         )
 
         response = json.loads(response)

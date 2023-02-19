@@ -1,6 +1,8 @@
 import jwt
 import datetime
 
+from . import gpt3
+
 
 bad_request_code = 400
 invalid_auth_code = 401
