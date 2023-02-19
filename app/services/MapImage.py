@@ -44,7 +44,7 @@ def mapImage(notes):
     response = response["choices"][0]["text"].strip()
     #data = list(response["choices"][0]["text"].strip())
     import ast
-    data = response.split(":")[1][1:-5].strip()
+    data = response[5:response.index('Set2:')].strip()
     #data2 = response.split(":")[-1][1:].strip()
 
     #data = ast.literal_eval(data)
@@ -71,6 +71,8 @@ def mapImage(notes):
     from graphviz import Digraph#
     import json
     # Define a function to build the graph
+    print(type(data))
+    print(data)
     while True:
         try:
             tree = json.loads(data)
@@ -87,12 +89,17 @@ def mapImage(notes):
             build_graph(dot, tree)
             break
         except:
+            print('error occurred!')
             data += "}"
     
     #dot.render('tree', format='png')
     #download images on frontend
 
     # Output the graph as a PNG file in a folder
-    dot.render(f'mindmaps/set1_tree{notes[:10]}.png')
-    return f'set1_tree{notes[:10]}.png'
-    graph2.write_png('mindmaps/set2_tree.png')
+    print('out')
+    dot.render(f'../mindmap/set1_treetest', format='png')
+    print('renders')
+    var = 'set1_treetest.png'
+    print(var)
+    return var
+    #graph2.write_png('mindmaps/set2_tree.png')

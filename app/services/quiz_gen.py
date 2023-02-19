@@ -19,6 +19,6 @@ class QuizGen:
 
         print(response.get('choices'))
 
-        response = json.loads(response.to_dict_recursive())
+        response = json.loads(response.to_dict_recursive()['choices'][0]['text'].strip())
 
         return response

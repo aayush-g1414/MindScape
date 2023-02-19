@@ -1,0 +1,112 @@
+digraph {
+	"Attribution Theory" -> "Dispositional attribution"
+	"Dispositional attribution"
+	"Attribution Theory" -> "Situational attribution"
+	"Situational attribution"
+	"Attribution Theory" -> "Correspondent inference theory"
+	"Correspondent inference theory"
+	"Attribution Theory" -> "Military vs. peace corps study"
+	"Military vs. peace corps study"
+	"Attribution Theory" -> "Assumed desirability"
+	"Assumed desirability"
+	"Attribution Theory" -> "Attributional biases"
+	"Attributional biases"
+	"Attribution Theory" -> "Fundamental attribution error"
+	"Fundamental attribution error"
+	"Attribution Theory" -> "FAE Actor study"
+	"FAE Actor study"
+	"Attribution Theory" -> "Actor observer effect"
+	"Actor observer effect"
+	"Attribution Theory" -> "Video tape conversation study"
+	"Video tape conversation study"
+	"Attribution Theory" -> "Self enhancement"
+	"Self enhancement"
+	"Attribution Theory" -> "Social perceptiveness study"
+	"Social perceptiveness study"
+	"Attribution Theory" -> Consistency
+	Consistency
+	"Attribution Theory" -> "Self-serving bias"
+	"Self-serving bias"
+	"Attribution Theory" -> "Egocentric bias"
+	"Egocentric bias"
+	"Attribution Theory" -> "Better than average bias"
+	"Better than average bias"
+	"Attribution Theory" -> "False consensus effect"
+	"False consensus effect"
+	"Attribution Theory" -> "False uniqueness effect"
+	"False uniqueness effect"
+	"Attribution Theory" -> "Self handicapping"
+	"Self handicapping"
+	"Attribution Theory" -> "Drugs and intellectual study"
+	"Drugs and intellectual study"
+	"Group Behavior" -> Roles
+	Roles
+	Roles -> "Instrumental role"
+	"Instrumental role"
+	Roles -> "Expressive role"
+	"Expressive role"
+	"Group Behavior" -> Norms
+	Norms
+	"Group Behavior" -> Homogeneity
+	Homogeneity
+	"Group Behavior" -> Heterogeneity
+	Heterogeneity
+	"Group Behavior" -> "Tolerance for norm deviance study"
+	"Tolerance for norm deviance study"
+	"Group Behavior" -> Cohesiveness
+	Cohesiveness
+	"Group Behavior" -> "Social facilitation"
+	"Social facilitation"
+	"Social facilitation" -> Facilitation
+	Facilitation
+	"Social facilitation" -> Inhibition
+	Inhibition
+	"Group Behavior" -> "Zajonc’s mere presence theory"
+	"Zajonc’s mere presence theory"
+	"Group Behavior" -> "Evaluation apprehension theory"
+	"Evaluation apprehension theory"
+	"Group Behavior" -> "Distraction conflict theory"
+	"Distraction conflict theory"
+	"Group Behavior" -> "Yerkes-Dodson Law"
+	"Yerkes-Dodson Law"
+	"Group Behavior" -> "Social loafing"
+	"Social loafing"
+	"Group Behavior" -> "Group applause study"
+	"Group applause study"
+	"Group Behavior" -> "Collective effort model"
+	"Collective effort model"
+	"Group Behavior" -> Deindividuation
+	Deindividuation
+	Deindividuation -> "Attentional cues"
+	"Attentional cues"
+	Deindividuation -> "Accountability cues"
+	"Accountability cues"
+	"Group Behavior" -> "Halloween candy study"
+	"Halloween candy study"
+	"Group Behavior" -> "Process loss"
+	"Process loss"
+	"Group Behavior" -> "Process gain"
+	"Process gain"
+	"Group Behavior" -> "Additive tasks"
+	"Additive tasks"
+	"Group Behavior" -> "Conjunctive tasks"
+	"Conjunctive tasks"
+	"Group Behavior" -> "Disjunctive tasks"
+	"Disjunctive tasks"
+	"Group Behavior" -> Brainstorming
+	Brainstorming
+	Brainstorming -> Drawbacks
+	Drawbacks
+	Drawbacks -> "Production blocking"
+	"Production blocking"
+	Drawbacks -> "Free riding"
+	"Free riding"
+	Drawbacks -> "Evaluation apprehension"
+	"Evaluation apprehension"
+	Drawbacks -> "Performance matching"
+	"Performance matching"
+	"Group Behavior" -> "Group polarization"
+	"Group polarization"
+	"Group Behavior" -> "Biased sampling"
+	"Biased sampling"
+}

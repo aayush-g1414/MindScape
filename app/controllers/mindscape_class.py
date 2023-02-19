@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request, current_app, redirect
+from flask import Blueprint, jsonify, request, current_app, redirect, url_for
 from app.models import Class, Resource
 from werkzeug.utils import secure_filename
 from bson.binary import Binary
@@ -187,18 +187,7 @@ def generate_quiz(class_id):
 
     print(results)
 
-    return jsonify([
-        {
-            'q': 'What is an OS?',
-            'a': 1,
-            'options': [
-                'a',
-                'b',
-                'c',
-                'd'
-            ]
-        }
-    ])
+    return jsonify(results)
 
 
 @class_bp.route('/<class_id>/generate-flashcards', methods=['POST'])
@@ -225,7 +214,7 @@ def generate_mindmaps(class_id):
     for resource in user_class.resources:
         if resource.type == pdf_file_enum:
             resource_url_parts = resource.url.split('/')
-            filename = os.path.join(current_app.config['UPLOAD_FOLDER'], resource_url_parts[len(resource_url_parts) - 1])
+            filename = os.path.join('app', 'static', current_app.config['UPLOAD_FOLDER'], resource_url_parts[len(resource_url_parts) - 1])
             # filename = 'user_uploads/Psych_cheat_sheet_-_Google_Docs.pdf'  # todo: remove
             reader = PdfReader(filename)
 
@@ -234,13 +223,16 @@ def generate_mindmaps(class_id):
 
             
     name = mapImage(text)
-    user_class.mind_map = request.host_url+'mindmaps/'+name
+    print(name)
+    user_class.mind_map = request.host_url+'mindmap/'+name
 
     user_class.save()
+    print('saved user')
+
 
     return jsonify([
         {
-            'data': request.host_url+'mindmaps/'+name
+            'data': url_for('static', filename='mindmap/'+name)
         }
     ])
 
