@@ -216,8 +216,12 @@ def generate_mindmaps(class_id):
 
             
     name = mapImage(text)
+    user_class.mind_map = request.host_url+'mindmaps/'+name
+
+    user_class.save()
+
     return jsonify([
         {
-            'data': 'https://4f39-68-65-175-64.ngrok.io/mindmaps/' + name
+            'data': request.host_url+'mindmaps/'+name
         }
     ])
