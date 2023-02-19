@@ -78,16 +78,18 @@ def mapImage(notes):
                         graph.node(k)        
                     if v:            
                         build_graph(graph, v, k)
-                        # Create a new Digraph object
-            dot = Digraph()# Build the graph
-            build_graph(dot, tree)# Output the graph as a PNG file
-           
+            # Create a new Digraph object
+            dot = Digraph()
+            # Build the graph
+            build_graph(dot, tree)
             break
         except:
             data += "}"
     
     #dot.render('tree', format='png')
     #download images on frontend
+
+    # Output the graph as a PNG file in a folder
     dot.render(f'mindmaps/set1_tree{notes[:10]}.png')
     return f'set1_tree{notes[:10]}.png'
     graph2.write_png('mindmaps/set2_tree.png')
