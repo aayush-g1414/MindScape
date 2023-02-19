@@ -60,7 +60,7 @@ def mapImage(notes):
     # print(data)
     while True:
         try:
-            question = "Create an outputs similar to this set as a json: {'Pets': { 'Dog': { 'Bark': {'noise': { }, 'dog noise': { } }, 'Walk': {'action' : { }, 'action again' : { } }  }, 'Cat': {'Meow': { 'noise': { }, 'cat noise': { } },'Purr': { 'action': { }, 'cat action': { } }  } } } \n\n where the first word is byitself/the root, noise and dog noise relate to bark, action and action again relate to walk, noise and cat noise relate to meow, and action and cat action relate to purr\n\nso that each successive layer has an extra set of curly braces using this text instead (make sure to extract keywords only and only create the output based on similarity/correlation between the keywords and key reminder is that you should create 2 different sets so that you don't have to relate stuff that isn't related to each other and keep each layer between 2^n and 4^n elements-> do this in the form of Set1:  \n Set2: ): \n\n" + notes
+            question = "Create an outputs similar to this set as a json: {'Pets': { 'Dog': { 'Bark': {'noise': { }, 'dog noise': { } }, 'Walk': {'action' : { }, 'action again' : { } }  }, 'Cat': {'Meow': { 'noise': { }, 'cat noise': { } },'Purr': { 'action': { }, 'cat action': { } }  } } } \n\n where the first word is byitself/the root, noise and dog noise relate to bark, action and action again relate to walk, noise and cat noise relate to meow, and action and cat action relate to purr\n\nso that each successive layer has an extra set of curly braces and keep each layer between 2^n and 4^n elements using this text instead (make sure to extract keywords only and only create the output based on similarity/correlation between the keywords and key reminder is that you should create 2 different sets so that you don't have to relate stuff that isn't related to each other-> do this in the form of Set1:  \n Set2: ): \n\n" + notes
             response = openai.Completion.create(
                                 engine="text-davinci-003",
                                 prompt=question,
@@ -70,17 +70,19 @@ def mapImage(notes):
                                 frequency_penalty=0.0,
                                 presence_penalty=0.0
                             )
-            print(response["choices"][0]["text"].strip())
+            #print(response["choices"][0]["text"].strip())
             response = response["choices"][0]["text"].strip()
             #data = list(response["choices"][0]["text"].strip())
             import ast
-            data = response[5:response.index('Set2:')].strip()
-            while True:
-                try: 
-                    tree = json.loads(data)
-                    break
-                except:
-                    data += "}"
+            data = response[5:response.index('Set2:')+1].strip()
+            print(data)
+            tree = json.loads(data)
+            # while True:
+            #     try: 
+                    
+            #         break
+            #     except:
+            #         data += "}"
                     #tree = json.loads(data)
             def build_graph(graph, node, parent=None):    
                 for k, v in node.items():        
