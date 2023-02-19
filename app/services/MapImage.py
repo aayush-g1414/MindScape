@@ -74,7 +74,7 @@ def mapImage(notes):
             response = response["choices"][0]["text"].strip()
             #data = list(response["choices"][0]["text"].strip())
             import ast
-            data = response[5:response.index('Set2:')+1].strip()
+            data = response[5:response.index('Set2:')].strip()
             print(data)
             tree = json.loads(data)
             # while True:
