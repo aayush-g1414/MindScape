@@ -218,7 +218,7 @@ def generate_mindmaps(class_id):
 
     if len(user_class.resources) == 0:
         return jsonify({
-            'error': 'No resources to generate quizzes from!',
+            'error': 'No resources to generate mindmaps!',
         })
 
     text = ''
@@ -243,3 +243,32 @@ def generate_mindmaps(class_id):
             'data': request.host_url+'mindmaps/'+name
         }
     ])
+
+
+from app.services.chatbot import chatbot, getResponse
+
+@class_bp.route('/<class_id>/chatbot', methods=['POST'])
+def chat(class_id):
+    user_class = Class.objects(pk=ObjectId(class_id)).first()
+
+    if len(user_class.resources) == 0:
+        return jsonify({
+            'error': 'No resources to generate chatbot from',
+        })
+    
+    text = ''
+    for resource in user_class.resources:
+        if resource.type == pdf_file_enum:
+            resource_url_parts = resource.url.split('/')
+            filename = os.path.join(current_app.config['UPLOAD_FOLDER'], resource_url_parts[len(resource_url_parts) - 1])
+            # filename = 'user_uploads/Psych_cheat_sheet_-_Google_Docs.pdf'  # todo: remove
+            reader = PdfReader(filename)
+
+            for page in reader.pages:
+                text += page.extract_text()
+    
+    df = chatbot(text)
+    data = request.get_json()
+    message = data['message']
+    response_message = getResponse(message, df)
+    return jsonify({'message': response_message})
