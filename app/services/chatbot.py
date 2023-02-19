@@ -142,11 +142,17 @@ def chatbot(text):
     df['embeddings'] = df['embeddings'].apply(eval).apply(np.array)
 
     df.head()
-
+    return df
     ################################################################################
     ### Step 12
     ################################################################################
 
+    
+
+
+    
+
+def getResponse(df, question):
     def create_context(
         question, df, max_len=1800, size="ada"
     ):
@@ -274,8 +280,14 @@ def chatbot(text):
             link_text += link + '\n'
         return link_text
     #modify code to prompt on front end not backend and etc
-    while (True):
-        question = input("What is your question: ")
-        answer = answer_question(df, question=question, debug=False)
-        print(answer)
-        print(webgpt(answer))
+
+    
+
+    ################################################################################
+    ### Step 14
+    ################################################################################
+
+    # create a webapi to call this function for me
+    question = input("What is your question: ")
+    answer = answer_question(df, question=question, debug=False)
+    return answer + "\n" + webgpt(answer)
