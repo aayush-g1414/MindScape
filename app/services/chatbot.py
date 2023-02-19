@@ -54,7 +54,7 @@ def chatbot(text):
     df['n_tokens'] = df.text.apply(lambda x: len(tokenizer.encode(x)))
 
     # Visualize the distribution of the number of tokens per row using a histogram
-    df.n_tokens.hist()
+    #df.n_tokens.hist()
 
     ################################################################################
     ### Step 8
