@@ -65,5 +65,6 @@ def mapImage(notes):
     #nx.draw(graph1)
 
     #download images on frontend
-    graph1.write_png('set1_tree.png')
-    graph2.write_png('set2_tree.png')
+    graph1.write_png(f'mindmaps/set1_tree{notes[:10]}.png')
+    return f'set1_tree{notes[:10]}.png'
+    graph2.write_png('mindmaps/set2_tree.png')

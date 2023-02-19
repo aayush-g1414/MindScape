@@ -193,11 +193,31 @@ def generate_flashcards(class_id):
     ])
 
 
+from services.MapImage import mapImage
 @class_bp.route('/<class_id>/generate-mindmap', methods=['POST'])
 def generate_mindmaps(class_id):
+    user_class = Class.objects(_id=ObjectId(class_id))
+
+    if len(user_class.resources) == 0:
+        return jsonify({
+            'error': 'No resources to generate quizzes from!',
+        })
+
+    text = ''
+    for resource in user_class.resources:
+        if resource.type == pdf_file_enum:
+            resource_url_parts = resource.url.split('/')
+            filename = os.path.join(current_app.config['UPLOAD_FOLDER'], resource_url_parts[len(resource_url_parts) - 1])
+            # filename = 'user_uploads/Psych_cheat_sheet_-_Google_Docs.pdf'  # todo: remove
+            reader = PdfReader(filename)
+
+            for page in reader.pages:
+                text += page.extract_text()
+
+            
+    name = mapImage(text)
     return jsonify([
         {
-            'front': 'A fixed size entity in memory that can be placed in a frame on disk',
-            'back': 'A Page'
+            'data': 'https://4f39-68-65-175-64.ngrok.io/mindmaps/' + name
         }
     ])
