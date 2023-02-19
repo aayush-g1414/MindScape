@@ -16,7 +16,7 @@ import openai
 from openai.embeddings_utils import distances_from_embeddings
 import numpy as np
 from openai.embeddings_utils import distances_from_embeddings, cosine_similarity
-openai.api_key = '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'
+openai.api_key = os.getenv('OPEN_AI_API_KEY')
 def chatbot(text):
     def remove_newlines(serie):
         serie = serie.str.replace('\n', ' ')
