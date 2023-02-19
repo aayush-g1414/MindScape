@@ -21,10 +21,17 @@ def mapInteract(notes):
             nodes.append(node)
         
         return root, graph
-
+    def flatten(lst):
+        result = []
+        for item in lst:
+            if isinstance(item, list):
+                result.extend(flatten(item))
+            else:
+                result.append(item)
+        return result
     import openai
     max_tokens = 2000
-    question = "Create an outputs similar to this set: ['pets', ['dog', 'cat'], [['bark', 'walk'], ['meow', 'purr']], [[['noise', 'dog noise'], ['action', 'action again']], [['noise', 'cat noise'], ['action', 'cat action']]]] \n\n where noise and dog noise relate to bark, action and action again relate to walk, noise and cat noise relate to meow, and action and cat action relate to purr\n\nso that each successive layer has an extra set of brackets using this text instead (make sure to extract keywords only and only create the output based on similarity/correlation between the keywords and key reminder is that you should create 2 different sets so that you don't have to relate stuff that isn't related to each other -> do this in the form of Set1:  \n Set2: ): \n\n" + notes
+    question = "Create an outputs similar to this set: ['pets', ['dog', 'cat'], [['bark', 'walk'], ['meow', 'purr']], [[['noise', 'dog noise'], ['action', 'action again']], [['noise', 'cat noise'], ['action', 'cat action']]]] \n\n where the first word is byitself/the root, noise and dog noise relate to bark, action and action again relate to walk, noise and cat noise relate to meow, and action and cat action relate to purr\n\nso that each successive layer has an extra set of brackets using this text instead (make sure to extract keywords only and only create the output based on similarity/correlation between the keywords and key reminder is that you should create 2 different sets so that you don't have to relate stuff that isn't related to each other -> do this in the form of Set1:  \n Set2: ): \n\n" + notes
     response = openai.Completion.create(
                         engine="text-davinci-003",
                         prompt=question,
@@ -35,9 +42,13 @@ def mapInteract(notes):
                         presence_penalty=0.0
                     )
     print(response["choices"][0]["text"].strip())
+    response = response["choices"][0]["text"].strip()
     #data = list(response["choices"][0]["text"].strip())
-    data = []
-    data2 = []
+    import ast
+    data = response.split(":")[1][1:-5].strip()
+    data2 = response.split(":")[-1][1:].strip()
+    data = ast.literal_eval(data)
+    data2 = ast.literal_eval(data2)
     data = flatten(data)
     data2 = flatten(data2)
     root1, graph1 = create_binary_tree(data)
