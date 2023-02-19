@@ -30,21 +30,6 @@ def mapImage(notes):
     import openai
     openai.api_key = os.getenv('OPEN_AI_API_KEY')
     max_tokens = 2000
-    question = "Create an outputs similar to this set as a json: {'Pets': { 'Dog': { 'Bark': {'noise': { }, 'dog noise': { } }, 'Walk': {'action' : { }, 'action again' : { } }  }, 'Cat': {'Meow': { 'noise': { }, 'cat noise': { } },'Purr': { 'action': { }, 'cat action': { } }  } } } \n\n where the first word is byitself/the root, noise and dog noise relate to bark, action and action again relate to walk, noise and cat noise relate to meow, and action and cat action relate to purr\n\nso that each successive layer has an extra set of curly braces using this text instead (make sure to extract keywords only and only create the output based on similarity/correlation between the keywords and key reminder is that you should create 2 different sets so that you don't have to relate stuff that isn't related to each other and keep each layer between 2^n and 4^n elements-> do this in the form of Set1:  \n Set2: ): \n\n" + notes
-    response = openai.Completion.create(
-                        engine="text-davinci-003",
-                        prompt=question,
-                        temperature=0.1,
-                        max_tokens=max_tokens,
-                        top_p=1.0,
-                        frequency_penalty=0.0,
-                        presence_penalty=0.0
-                    )
-    print(response["choices"][0]["text"].strip())
-    response = response["choices"][0]["text"].strip()
-    #data = list(response["choices"][0]["text"].strip())
-    import ast
-    data = response[5:response.index('Set2:')].strip()
     #data2 = response.split(":")[-1][1:].strip()
 
     #data = ast.literal_eval(data)
@@ -75,7 +60,28 @@ def mapImage(notes):
     print(data)
     while True:
         try:
-            tree = json.loads(data)
+            question = "Create an outputs similar to this set as a json: {'Pets': { 'Dog': { 'Bark': {'noise': { }, 'dog noise': { } }, 'Walk': {'action' : { }, 'action again' : { } }  }, 'Cat': {'Meow': { 'noise': { }, 'cat noise': { } },'Purr': { 'action': { }, 'cat action': { } }  } } } \n\n where the first word is byitself/the root, noise and dog noise relate to bark, action and action again relate to walk, noise and cat noise relate to meow, and action and cat action relate to purr\n\nso that each successive layer has an extra set of curly braces using this text instead (make sure to extract keywords only and only create the output based on similarity/correlation between the keywords and key reminder is that you should create 2 different sets so that you don't have to relate stuff that isn't related to each other and keep each layer between 2^n and 4^n elements-> do this in the form of Set1:  \n Set2: ): \n\n" + notes
+            response = openai.Completion.create(
+                                engine="text-davinci-003",
+                                prompt=question,
+                                temperature=0.1,
+                                max_tokens=max_tokens,
+                                top_p=1.0,
+                                frequency_penalty=0.0,
+                                presence_penalty=0.0
+                            )
+            print(response["choices"][0]["text"].strip())
+            response = response["choices"][0]["text"].strip()
+            #data = list(response["choices"][0]["text"].strip())
+            import ast
+            data = response[5:response.index('Set2:')].strip()
+            while True:
+                try: 
+                    tree = json.loads(data)
+                    break
+                except:
+                    data += "}"
+                    #tree = json.loads(data)
             def build_graph(graph, node, parent=None):    
                 for k, v in node.items():        
                     if parent:            
@@ -90,7 +96,7 @@ def mapImage(notes):
             break
         except:
             print('error occurred!')
-            data += "}"
+            #data += "}"
     
     #dot.render('tree', format='png')
     #download images on frontend
