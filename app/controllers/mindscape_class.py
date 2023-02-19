@@ -167,13 +167,12 @@ def generate_quiz(class_id):
             for page in reader.pages:
                 text += page.extract_text()
 
-            print(text)
 
         elif resource.type == docx_file_enum:
             pass
 
-    print(text)
     chunks = gpt3.chunkify(3500, text)
+    print('chunks: '+str(chunks))
     first_chunk = 0
 
     results = []

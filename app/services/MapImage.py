@@ -30,7 +30,6 @@ def mapImage(notes):
     import openai
     openai.api_key = os.getenv('OPEN_AI_API_KEY')
     max_tokens = 2000
-    openai.api_key = os.getenv("OPENAI_API_KEY")
     question = "Create an outputs similar to this set as a json: {'Pets': { 'Dog': { 'Bark': {'noise': {}, 'dog noise': {} }, 'Walk': {'action' : {}, 'action again' : {}}  }, 'Cat': {'Meow': { 'noise': {}, 'cat noise': {} },'Purr': { 'action': {}, 'cat action': {} }  } }} \n\n where the first word is byitself/the root, noise and dog noise relate to bark, action and action again relate to walk, noise and cat noise relate to meow, and action and cat action relate to purr\n\nso that each successive layer has an extra set of curly braces using this text instead (make sure to extract keywords only and only create the output based on similarity/correlation between the keywords and key reminder is that you should create 2 different sets so that you don't have to relate stuff that isn't related to each other -> do this in the form of Set1:  \n Set2: ): \n\n" + notes
     response = openai.Completion.create(
                         engine="text-davinci-003",
