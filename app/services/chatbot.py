@@ -288,6 +288,6 @@ def getResponse(df, question):
     ################################################################################
 
     # create a webapi to call this function for me
-    question = input("What is your question: ")
+    #question = input("What is your question: ")
     answer = answer_question(df, question=question, debug=False)
     return answer + "\n" + webgpt(answer)
