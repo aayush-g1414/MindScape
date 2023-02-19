@@ -193,10 +193,10 @@ def generate_flashcards(class_id):
     ])
 
 
-from services.MapImage import mapImage
+from app.services.MapImage import mapImage
 @class_bp.route('/<class_id>/generate-mindmap', methods=['POST'])
 def generate_mindmaps(class_id):
-    user_class = Class.objects(_id=ObjectId(class_id))
+    user_class = Class.objects(pk=ObjectId(class_id)).first()
 
     if len(user_class.resources) == 0:
         return jsonify({
