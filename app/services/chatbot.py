@@ -1,7 +1,3 @@
-################################################################################
-### Step 1
-################################################################################
-
 #import requests
 import re
 import urllib.request
@@ -25,11 +21,6 @@ def chatbot(text):
         serie = serie.str.replace('  ', ' ')
         return serie
 
-
-    ################################################################################
-    ### Step 6
-    ################################################################################
-
     # Create a list to store the text files
     texts=[("text", text)]
 
@@ -39,10 +30,6 @@ def chatbot(text):
     df['text'] = df.fname + ". " + remove_newlines(df.text)
     df.to_csv('scraped.csv')
     df.head()
-
-    ################################################################################
-    ### Step 7
-    ################################################################################
 
     # Load the cl100k_base tokenizer which is designed to work with the ada-002 model
     tokenizer = tiktoken.get_encoding("cl100k_base")
@@ -55,10 +42,6 @@ def chatbot(text):
 
     # Visualize the distribution of the number of tokens per row using a histogram
     df.n_tokens.hist()
-
-    ################################################################################
-    ### Step 8
-    ################################################################################
 
     max_tokens = 500
 
@@ -115,17 +98,9 @@ def chatbot(text):
         else:
             shortened.append( row[1]['text'] )
 
-    ################################################################################
-    ### Step 9
-    ################################################################################
-
     df = pd.DataFrame(shortened, columns = ['text'])
     df['n_tokens'] = df.text.apply(lambda x: len(tokenizer.encode(x)))
     df.n_tokens.hist()
-
-    ################################################################################
-    ### Step 10
-    ################################################################################
 
     # Note that you may run into rate limit issues depending on how many files you try to embed
     # Please check out our rate limit guide to learn more on how to handle this: https://platform.openai.com/docs/guides/rate-limits
@@ -134,14 +109,11 @@ def chatbot(text):
     df.to_csv('embeddings.csv')
     df.head()
 
-    ################################################################################
-    ### Step 11
-    ################################################################################
-
     df=pd.read_csv('embeddings.csv', index_col=0)
     df['embeddings'] = df['embeddings'].apply(eval).apply(np.array)
 
     df.head()
+<<<<<<< HEAD
     return df
     ################################################################################
     ### Step 12
@@ -153,6 +125,9 @@ def chatbot(text):
     
 
 def getResponse(df, question):
+=======
+
+>>>>>>> fecb1f2e49ce19c9f18e666b253a8fee4b898a0d
     def create_context(
         question, df, max_len=1800, size="ada"
     ):
@@ -240,9 +215,6 @@ def getResponse(df, question):
             print(e)
             return ""
 
-    ################################################################################
-    ### Step 13
-    ################################################################################
     import webbrowser
     import openai
     import re
