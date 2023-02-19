@@ -1,6 +1,7 @@
 import os
 
 from flask import Flask, jsonify
+from flask_cors import CORS
 from . import settings, controllers
 
 
@@ -11,6 +12,7 @@ project_dir = os.path.dirname(os.path.abspath(__file__))
 def create_app(config_object=settings):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
+    CORS(app, resources={r"/*": {"origins": "*"}})
     app.config.from_object(config_object)
 
     from app.db import terminate_on_app_teardown, db
@@ -22,6 +24,7 @@ def create_app(config_object=settings):
     register_blueprints(app)
 
     register_errorhandlers(app)
+
     return app
 
 def register_extensions(app):
@@ -36,6 +39,8 @@ def register_blueprints(app):
     """Register Flask blueprints."""
     app.register_blueprint(controllers.home.blueprint)
     app.register_blueprint(controllers.tutorial.blueprint)
+    app.register_blueprint(controllers.mindscape_class.class_bp)
+    app.register_blueprint(controllers.session.session)
     return None
 
 def register_errorhandlers(app):

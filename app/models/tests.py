@@ -8,3 +8,4 @@ class TestDoc(db.Document):
     name = StringField()
     message = StringField()
 
+

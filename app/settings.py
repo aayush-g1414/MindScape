@@ -12,3 +12,4 @@ SQLALCHEMY_TRACK_MODIFICATIONS = False
 MONGODB_SETTINGS = {
     'host': os.getenv('MONGODB_URL'),
 }
+UPLOAD_FOLDER = 'user_uploads'

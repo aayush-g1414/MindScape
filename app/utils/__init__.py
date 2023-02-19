@@ -2,6 +2,11 @@ import jwt
 import datetime
 
 
+bad_request_code = 400
+invalid_auth_code = 401
+not_found_code = 404
+
+
 def generate_access_and_refresh_tokens(access_token_key: str, refresh_token_key: str, user_id: str) -> dict:
     access_token = jwt.encode(
         {
